@@ -7,14 +7,27 @@ const attendanceSchema = new mongoose.Schema({
   status: { type: String, enum: ["present", "absent"], required: true },
   markedBy: { type: String, required: true },       // driver username or driver id
 
-  date: {
+date: {
     type: String,
-    default: () => new Date().toISOString().split("T")[0] // yyyy-mm-dd
+    default: () =>
+      new Date().toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      })
   },
+
   time: {
     type: String,
-    default: () => new Date().toLocaleTimeString()
+    default: () =>
+      new Date().toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      })
   }
+
 }, { timestamps: true });
 
 attendanceSchema.index({ studentId: 1, date: 1 }, { unique: true });
